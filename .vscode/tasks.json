@@ -1,0 +1,21 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "sqlproj: Build sohoje_hishab",
+			"type": "process",
+			"command": "dotnet",
+			"args": [
+				"build",
+				"c:/sohoj hishab/sohoje_hishab/sohoje_hishab.sqlproj"
+			],
+			"problemMatcher": "$sqlproj-problem-matcher",
+			"isBackground": true,
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"detail": "Builds the sohoje_hishab SQL project"
+		}
+	]
+}

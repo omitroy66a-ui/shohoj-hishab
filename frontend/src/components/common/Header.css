@@ -1,0 +1,140 @@
+/* Header Styles */
+.header {
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #667eea;
+  text-decoration: none;
+}
+
+.logo-icon {
+  font-size: 1.8rem;
+}
+
+/* Navigation */
+.nav {
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-link {
+  color: #666;
+  font-weight: 500;
+  transition: color 0.3s;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid transparent;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: #667eea;
+  border-bottom-color: #667eea;
+}
+
+/* Header Actions */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-left: auto;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.user-name {
+  font-weight: 600;
+  color: #333;
+}
+
+.user-role {
+  font-size: 0.875rem;
+  color: #999;
+}
+
+.logout-btn {
+  background: #fee2e2;
+  color: #991b1b;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+}
+
+.logout-btn:hover {
+  background: #fecaca;
+}
+
+/* Mobile Menu */
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .header-container {
+    gap: 1rem;
+  }
+
+  .nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background: white;
+    gap: 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .nav.nav-open {
+    display: flex;
+  }
+
+  .nav-link {
+    padding: 1rem;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .mobile-menu-btn {
+    display: flex;
+  }
+
+  .header-actions {
+    gap: 1rem;
+  }
+
+  .user-info {
+    display: none;
+  }
+}

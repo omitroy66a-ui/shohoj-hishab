@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../services/SubscriptionService.php';
 
 $name = isset($_POST['name']) ? trim($_POST['name']) : '';
 $email = isset($_POST['email']) ? trim($_POST['email']) : '';
@@ -33,9 +34,34 @@ $role = 'staff';
 $insertStmt->bind_param('ssss', $name, $email, $hashedPassword, $role);
 
 if ($insertStmt->execute()) {
+    $user_id = $insertStmt->insert_id;
     $insertStmt->close();
-    header('Location: ../login.php?registered=1');
-    exit;
+    
+    // Create auto business/shop for user (if needed)
+    // Assuming users have associated businesses. Adjust as per your schema
+    $business_name = $name . "'s Shop";
+    $businessStmt = $conn->prepare('INSERT INTO businesses (user_id, name) VALUES (?, ?)');
+    $businessStmt->bind_param('is', $user_id, $business_name);
+    
+    if ($businessStmt->execute()) {
+        $business_id = $businessStmt->insert_id;
+        $businessStmt->close();
+        
+        // AUTO TRIAL ACTIVATION
+        $subscriptionService = new SubscriptionService($conn);
+        $trial_result = $subscriptionService->createTrialSubscription($business_id);
+        
+        if ($trial_result['success']) {
+            // Redirect to login with success message
+            header('Location: ../login.php?registered=1&trial=activated');
+            exit;
+        }
+    } else {
+        $businessStmt->close();
+        // Still redirect even if business creation fails - user can be created manually
+        header('Location: ../login.php?registered=1');
+        exit;
+    }
 }
 
 $insertStmt->close();

@@ -1,0 +1,51 @@
+// ============================================================
+// React API Service
+// File: src/services/api.ts
+// ============================================================
+
+import axios from 'axios';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+const api = axios.create({
+  baseURL: `${API_URL}/api`,
+  withCredentials: true,
+});
+
+// Subscription APIs
+export const subscriptionAPI = {
+  getStatus: () => api.get('/subscription.php?action=get_status'),
+  getPlans: () => api.get('/subscription.php?action=get_plans'),
+  upgrade: (planId: number, duration: string) =>
+    api.post('/subscription.php?action=upgrade', { plan_id: planId, duration_type: duration }),
+  checkFeature: (feature: string) =>
+    api.get(`/subscription.php?action=check_feature&feature=${feature}`),
+  getFeatures: () => api.get('/subscription.php?action=features'),
+};
+
+// Payment APIs
+export const paymentAPI = {
+  processPayment: (subscriptionId: number, paymentNumber: string, transactionId: string, amount: number) =>
+    api.post('/subscription.php?action=pay', {
+      subscription_id: subscriptionId,
+      payment_number: paymentNumber,
+      transaction_id: transactionId,
+      amount,
+    }),
+  getPendingPayments: () => api.get('/subscription.php?action=pending_payments'),
+  approvePayment: (paymentId: number) =>
+    api.post('/subscription.php?action=approve_payment', { payment_id: paymentId }),
+  rejectPayment: (paymentId: number, reason: string) =>
+    api.post('/subscription.php?action=reject_payment', { payment_id: paymentId, reason }),
+};
+
+// SMS APIs
+export const smsAPI = {
+  getStats: () => api.get('/sms.php?action=stats'),
+  sendBulkSMS: (phones: string[], message: string) =>
+    api.post('/sms.php?action=send_bulk', { phones, message }),
+  sendPaymentSMS: (phone: string, amount: number, paymentNumber: string) =>
+    api.post('/sms.php?action=send_payment', { phone, amount, payment_number: paymentNumber }),
+};
+
+export default api;

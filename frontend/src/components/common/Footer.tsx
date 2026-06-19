@@ -1,5 +1,5 @@
 import React from 'react'
-import { Facebook, Twitter, Linkedin, Mail } from 'lucide-react'
+import { Mail, Globe, Code } from 'lucide-react'
 import './Footer.css'
 
 const Footer: React.FC = () => {
@@ -26,9 +26,8 @@ const Footer: React.FC = () => {
           <div className="footer-section">
             <h4>Follow Us</h4>
             <div className="social-links">
-              <a href="#" title="Facebook"><Facebook size={20} /></a>
-              <a href="#" title="Twitter"><Twitter size={20} /></a>
-              <a href="#" title="LinkedIn"><Linkedin size={20} /></a>
+              <a href="#" title="Website"><Globe size={20} /></a>
+              <a href="#" title="Code"><Code size={20} /></a>
               <a href="mailto:info@sohojhishab.com" title="Email"><Mail size={20} /></a>
             </div>
           </div>

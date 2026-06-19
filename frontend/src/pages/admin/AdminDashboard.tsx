@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { adminSubscriptionService } from '../../services/subscriptionService'
-import { adminSMSService, smsService } from '../../services/smsService'
+import { adminSMSService } from '../../services/smsService'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import './AdminPages.css'
 
 const AdminDashboard: React.FC = () => {
   const [dashboardData, setDashboardData] = useState<any>({})
-  const [loading, setLoading] = useState(true)
   const [smsStats, setSmsStats] = useState<any>({})
 
   useEffect(() => {
@@ -15,7 +13,6 @@ const AdminDashboard: React.FC = () => {
 
   const loadDashboardData = async () => {
     try {
-      setLoading(true)
       const smsData = await adminSMSService.getSMSStats()
       setSmsStats(smsData)
       
@@ -27,8 +24,6 @@ const AdminDashboard: React.FC = () => {
       })
     } catch (error) {
       console.error('Failed to load dashboard', error)
-    } finally {
-      setLoading(false)
     }
   }
 

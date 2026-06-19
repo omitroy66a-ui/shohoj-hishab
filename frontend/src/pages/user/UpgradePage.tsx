@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useSubscriptionStore } from '../../store/subscriptionStore'
-import { subscriptionService } from '../../services/subscriptionService'
 import './UserPages.css'
 
 const UpgradePage: React.FC = () => {

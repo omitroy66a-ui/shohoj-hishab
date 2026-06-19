@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { adminSubscriptionService } from '../../services/subscriptionService'
-import { Check, X, Trash2 } from 'lucide-react'
+import { Check, X } from 'lucide-react'
 import './AdminPages.css'
 
 const AdminPayments: React.FC = () => {

@@ -1,31 +1,17 @@
 import React, { useEffect } from 'react'
 import { useSubscriptionStore } from '../../store/subscriptionStore'
 import { useAuthStore } from '../../store/authStore'
-import SubscriptionCard from '../../components/subscription/SubscriptionCard'
 import PlanComparison from '../../components/subscription/PlanComparison'
 import FeaturesList from '../../components/subscription/FeaturesList'
 import './UserPages.css'
 
 const DashboardPage: React.FC = () => {
-  const { subscription, fetchSubscription, isLoading } = useSubscriptionStore()
+  const { subscription, fetchSubscription } = useSubscriptionStore()
   const { user } = useAuthStore()
 
   useEffect(() => {
     fetchSubscription()
   }, [])
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active':
-        return 'success'
-      case 'expired':
-        return 'danger'
-      case 'cancelled':
-        return 'warning'
-      default:
-        return 'info'
-    }
-  }
 
   return (
     <div className="dashboard-page">

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { smsService } from '../../services/smsService'
-import { Send, MessageSquare, AlertCircle } from 'lucide-react'
+import { MessageSquare } from 'lucide-react'
 import './UserPages.css'
 
 const SMSPage: React.FC = () => {

@@ -1,11 +1,7 @@
-<?php
-
 /**
  * Database Schema for Authentication
  * Run this to set up the database
  */
-
-$schema = "
 
 -- Users table with hashed passwords
 CREATE TABLE IF NOT EXISTS users (
@@ -101,12 +97,3 @@ CREATE TABLE IF NOT EXISTS user_sessions (
     INDEX idx_user (user_id),
     INDEX idx_expires (expires_at)
 );
-
-";
-
-// Instructions
-echo "📋 Database Schema for Authentication System\n\n";
-echo "Run the following SQL queries in your database:\n\n";
-echo $schema;
-
-?>

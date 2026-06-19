@@ -2,23 +2,24 @@ import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { Mail, Lock, AlertCircle, Loader as LoaderIcon } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
+import { FormErrors, AuthError } from '../../types'
 import './AuthPage.css'
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [errors, setErrors] = useState<any>({})
+  const [errors, setErrors] = useState<FormErrors>({})
   const { login, isLoading, error } = useAuthStore()
   const navigate = useNavigate()
 
-  const validateForm = () => {
-    const newErrors: any = {}
+  const validateForm = (): FormErrors => {
+    const newErrors: FormErrors = {}
     if (!email) newErrors.email = 'Email is required'
     if (!password) newErrors.password = 'Password is required'
     return newErrors
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault()
     const newErrors = validateForm()
     setErrors(newErrors)
@@ -27,8 +28,9 @@ const LoginPage: React.FC = () => {
       try {
         await login(email, password)
         navigate('/dashboard')
-      } catch (err: any) {
-        console.error('Login error:', err)
+      } catch (err) {
+        const authError = err as AuthError
+        console.error('Login error:', authError.message)
       }
     }
   }

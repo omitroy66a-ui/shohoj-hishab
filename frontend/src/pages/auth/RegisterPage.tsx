@@ -2,10 +2,20 @@ import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { User, Mail, Phone, Building, Lock, AlertCircle, Loader as LoaderIcon } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
+import { FormErrors, AuthError } from '../../types'
 import './AuthPage.css'
 
+interface RegistrationFormData {
+  name: string
+  email: string
+  phone: string
+  business_name: string
+  password: string
+  confirmPassword: string
+}
+
 const RegisterPage: React.FC = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<RegistrationFormData>({
     name: '',
     email: '',
     phone: '',
@@ -13,12 +23,12 @@ const RegisterPage: React.FC = () => {
     password: '',
     confirmPassword: '',
   })
-  const [errors, setErrors] = useState<any>({})
+  const [errors, setErrors] = useState<FormErrors>({})
   const { register, isLoading, error } = useAuthStore()
   const navigate = useNavigate()
 
-  const validateForm = () => {
-    const newErrors: any = {}
+  const validateForm = (): FormErrors => {
+    const newErrors: FormErrors = {}
     if (!formData.name) newErrors.name = 'Full name is required'
     if (!formData.email) newErrors.email = 'Email is required'
     if (!formData.phone) newErrors.phone = 'Phone number is required'
@@ -29,7 +39,7 @@ const RegisterPage: React.FC = () => {
     return newErrors
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target
     setFormData((prev) => ({
       ...prev,
@@ -37,7 +47,7 @@ const RegisterPage: React.FC = () => {
     }))
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault()
     const newErrors = validateForm()
     setErrors(newErrors)
@@ -46,8 +56,9 @@ const RegisterPage: React.FC = () => {
       try {
         await register(formData)
         navigate('/dashboard')
-      } catch (err: any) {
-        console.error('Register error:', err)
+      } catch (err) {
+        const authError = err as AuthError
+        console.error('Register error:', authError.message)
       }
     }
   }

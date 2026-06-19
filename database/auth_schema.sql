@@ -1,10 +1,11 @@
 /**
  * Database Schema for Authentication
  * Run this to set up the database
+ * MySQL Syntax (Not MSSQL/T-SQL)
  */
 
 -- Users table with hashed passwords
-CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE IF NOT EXISTS `users` (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,

@@ -1,4 +1,7 @@
+-- ============================================================
 -- Database Schema Update for Enhanced POS System
+-- MySQL Syntax (Not MSSQL/T-SQL)
+-- ============================================================
 
 -- Add columns to sales table for customer info
 ALTER TABLE sales ADD COLUMN customer_phone VARCHAR(20) AFTER customer_id;

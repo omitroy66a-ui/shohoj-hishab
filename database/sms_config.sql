@@ -1,5 +1,6 @@
 -- ============================================================
 -- SMS SERVICE CONFIGURATION & LOGGING
+-- MySQL Syntax (Not MSSQL/T-SQL)
 -- ============================================================
 
 -- SMS Provider Configuration

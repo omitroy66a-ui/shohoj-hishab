@@ -1,5 +1,6 @@
 -- ============================================================
 -- SUBSCRIPTION SYSTEM UPDATES
+-- MySQL Syntax (Not MSSQL/T-SQL)
 -- ============================================================
 -- Add Nagad payment config and discount system
 

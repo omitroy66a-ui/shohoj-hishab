@@ -1,5 +1,6 @@
 -- ============================================================
 -- SUBSCRIPTION SYSTEM DATABASE SCHEMA
+-- MySQL Syntax (Not MSSQL/T-SQL)
 -- ============================================================
 
 -- 1. Subscription Plans Table

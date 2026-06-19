@@ -1,0 +1,12 @@
+[sqlfluff]
+dialect = mysql
+
+[sqlfluff:indentation]
+indent_unit = space
+indent_size = 2
+
+[sqlfluff:rules:capitalisation.keywords]
+capitalisation_policy = upper
+
+[sqlfluff:rules:capitalisation.identifiers]
+capitalisation_policy = lower

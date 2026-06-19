@@ -1,4 +1,9 @@
-CREATE DATABASE sohoj_hishab;
+-- ============================================================
+-- SOHOJ HISHAB - Main Database Schema
+-- MySQL Syntax (Not MSSQL/T-SQL)
+-- ============================================================
+
+CREATE DATABASE IF NOT EXISTS sohoj_hishab;
 USE sohoj_hishab;
 
 CREATE TABLE users (
@@ -138,8 +143,7 @@ CREATE TABLE cashbook(
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-);
-
+-- Removed orphan ); 
 CREATE TABLE stock_logs(
     id INT AUTO_INCREMENT PRIMARY KEY,
     product_id INT,
@@ -276,14 +280,10 @@ INSERT INTO expense_categories(name_en,name_bn,type,business_id) VALUES
 ('Purchase Expense','ক্রয় খরচ','purchase',1),
 ('Other','অন্যান্য','other',1);
 
-CREATE TABLE employees (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(150),
-    phone VARCHAR(20),
-    salary DECIMAL(10,2),
-    business_id INT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+-- NOTE: employees table already created above
+-- Replaced duplicate with ALTER statements
+ALTER TABLE employees ADD COLUMN salary DECIMAL(10,2) AFTER phone;
+ALTER TABLE employees ADD COLUMN business_id INT DEFAULT NULL AFTER salary;
 
 CREATE TABLE business_settings (
     id INT AUTO_INCREMENT PRIMARY KEY,

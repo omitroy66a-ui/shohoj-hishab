@@ -29,37 +29,82 @@ const RegisterPage: React.FC = () => {
 
   const validateForm = (): FormErrors => {
     const newErrors: FormErrors = {}
-    if (!formData.name) newErrors.name = 'Full name is required'
-    if (!formData.email) newErrors.email = 'Email is required'
-    if (!formData.phone) newErrors.phone = 'Phone number is required'
-    if (!formData.business_name) newErrors.business_name = 'Business name is required'
+
+    if (!formData.name.trim()) newErrors.name = 'Full name is required'
+    if (!formData.email.trim()) newErrors.email = 'Email is required'
+    if (!formData.phone.trim()) newErrors.phone = 'Phone number is required'
+    if (!formData.business_name.trim()) newErrors.business_name = 'Business name is required'
     if (!formData.password) newErrors.password = 'Password is required'
-    if (formData.password.length < 6) newErrors.password = 'Password must be at least 6 characters'
-    if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match'
+    if (formData.password && formData.password.length < 8) {
+      newErrors.password = 'Password must be at least 8 characters'
+    }
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = 'Confirm password is required'
+    }
+    if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = 'Passwords do not match'
+    }
+
     return newErrors
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target
+
     setFormData((prev) => ({
       ...prev,
       [name]: value,
+    }))
+
+    setErrors((prev) => ({
+      ...prev,
+      [name]: '',
     }))
   }
 
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault()
+
     const newErrors = validateForm()
     setErrors(newErrors)
 
-    if (Object.keys(newErrors).length === 0) {
-      try {
-        await register(formData)
-        navigate('/dashboard')
-      } catch (err) {
-        const authError = err as AuthError
-        console.error('Register error:', authError.message)
+    if (Object.keys(newErrors).length > 0) {
+      return
+    }
+
+    try {
+      await register({
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone.trim(),
+        business_name: formData.business_name.trim(),
+        password: formData.password,
+        password_confirmation: formData.confirmPassword,
+      })
+      navigate('/dashboard')
+    } catch (err) {
+      const authError = err as AuthError & {
+        response?: {
+          data?: {
+            errors?: Record<string, string[]>
+          }
+        }
       }
+      const validationErrors = authError.response?.data?.errors
+
+      if (validationErrors) {
+        const serverErrors: FormErrors = {}
+
+        Object.entries(validationErrors).forEach(([field, messages]) => {
+          if (messages?.[0]) {
+            serverErrors[field] = messages[0]
+          }
+        })
+
+        setErrors(serverErrors)
+      }
+
+      console.error('Register error:', authError.message)
     }
   }
 
@@ -67,7 +112,7 @@ const RegisterPage: React.FC = () => {
     <div className="auth-container">
       <div className="auth-card auth-card-large">
         <div className="auth-header">
-          <div className="auth-logo">📊</div>
+          <div className="auth-logo">SH</div>
           <h1>Sohoj Hishab</h1>
           <p>Create Your Account</p>
         </div>
@@ -158,7 +203,7 @@ const RegisterPage: React.FC = () => {
                 type="password"
                 value={formData.password}
                 onChange={handleChange}
-                placeholder="••••••••"
+                placeholder="********"
                 className={errors.password ? 'error' : ''}
               />
             </div>
@@ -175,7 +220,7 @@ const RegisterPage: React.FC = () => {
                 type="password"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                placeholder="••••••••"
+                placeholder="********"
                 className={errors.confirmPassword ? 'error' : ''}
               />
             </div>

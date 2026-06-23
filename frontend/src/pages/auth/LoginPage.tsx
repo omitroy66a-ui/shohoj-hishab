@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { Mail, Lock, AlertCircle, Loader as LoaderIcon } from 'lucide-react'
+import { Phone, Lock, AlertCircle, Loader as LoaderIcon } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
 import { FormErrors, AuthError } from '../../types'
 import './AuthPage.css'
 
 const LoginPage: React.FC = () => {
-  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
   const [password, setPassword] = useState('')
   const [errors, setErrors] = useState<FormErrors>({})
   const { login, isLoading, error } = useAuthStore()
@@ -14,24 +14,29 @@ const LoginPage: React.FC = () => {
 
   const validateForm = (): FormErrors => {
     const newErrors: FormErrors = {}
-    if (!email) newErrors.email = 'Email is required'
+
+    if (!phone.trim()) newErrors.phone = 'Mobile number is required'
     if (!password) newErrors.password = 'Password is required'
+
     return newErrors
   }
 
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault()
+
     const newErrors = validateForm()
     setErrors(newErrors)
 
-    if (Object.keys(newErrors).length === 0) {
-      try {
-        await login(email, password)
-        navigate('/dashboard')
-      } catch (err) {
-        const authError = err as AuthError
-        console.error('Login error:', authError.message)
-      }
+    if (Object.keys(newErrors).length > 0) {
+      return
+    }
+
+    try {
+      await login(phone.trim(), password)
+      navigate('/dashboard')
+    } catch (err) {
+      const authError = err as AuthError
+      console.error('Login error:', authError.message)
     }
   }
 
@@ -39,7 +44,7 @@ const LoginPage: React.FC = () => {
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-header">
-          <div className="auth-logo">📊</div>
+          <div className="auth-logo">SH</div>
           <h1>Sohoj Hishab</h1>
           <p>Welcome Back!</p>
         </div>
@@ -53,19 +58,23 @@ const LoginPage: React.FC = () => {
           )}
 
           <div className="form-group">
-            <label htmlFor="email">Email Address</label>
+            <label htmlFor="phone">Mobile Number</label>
             <div className="input-group">
-              <Mail size={20} />
+              <Phone size={20} />
               <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="your@email.com"
-                className={errors.email ? 'error' : ''}
+                id="phone"
+                name="phone"
+                type="tel"
+                value={phone}
+                onChange={(e) => {
+                  setPhone(e.target.value)
+                  setErrors((prev) => ({ ...prev, phone: '' }))
+                }}
+                placeholder="01700000000"
+                className={errors.phone ? 'error' : ''}
               />
             </div>
-            {errors.email && <span className="error-text">{errors.email}</span>}
+            {errors.phone && <span className="error-text">{errors.phone}</span>}
           </div>
 
           <div className="form-group">
@@ -74,10 +83,14 @@ const LoginPage: React.FC = () => {
               <Lock size={20} />
               <input
                 id="password"
+                name="password"
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
+                onChange={(e) => {
+                  setPassword(e.target.value)
+                  setErrors((prev) => ({ ...prev, password: '' }))
+                }}
+                placeholder="********"
                 className={errors.password ? 'error' : ''}
               />
             </div>
